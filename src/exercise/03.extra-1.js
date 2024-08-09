@@ -1,6 +1,3 @@
-// // useContext: simple Counter
-// // http://localhost:3000/isolated/exercise/03.js
-
 import * as React from 'react'
 const CountContext = React.createContext()
 
@@ -11,14 +8,21 @@ function CountProvider(props) {
   return <CountContext.Provider value={value} {...props}/>
 }
 
+function useCount() {
+  const context = React.useContext(CountContext)
+  if(!context) {
+    throw new Error('useCount must be use within CountProvider')
+  }
+  return context
+}
 
 function CountDisplay() {
-  const [count, _] = React.useContext(CountContext)
+  const [count, _] = useCount()
   return <div>{`The current count is ${count}`}</div>
 }
 
 function Counter() {
-  const [, setCount] = React.useContext(CountContext)
+  const [_, setCount] = useCount()
   const increment = () => setCount(c => c + 1)
   return <button onClick={increment}>Increment count</button>
 }
